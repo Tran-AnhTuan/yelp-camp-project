@@ -1,0 +1,48 @@
+<% layout('./layouts/boilerplate.ejs') %>
+
+<div class="row mb-3">
+  <h1 class="text-center">New Campground</h1>
+  <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="title" name="campground[title]" required />
+      <div class="valid-feedback">Looks good!</div>
+      <!--Dùng campground[title] thì phải lấy req.body.campground.title-->
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" class="form-control" id="location" name="campground[location]" required />
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="price-label">$</span>
+        <input input type="number" class="form-control" id="price" name="campground[price]" placeholder="0.00" step="0.001" required />
+      </div>
+    </div>
+    <!-- <div class="mb-3">
+            <label for="img" class="form-label">Image Url:</label>
+            <input type="url" class="form-control" id="img" name="campground[imageUrl]" required />
+            <div class="valid-feedback">Looks good!</div>
+        </div> -->
+    <div class="mb-3">
+      <label for="images" class="form-label">Images</label>
+      <input class="form-control" type="file" id="images" name="images" multiple />
+      <div class="mt-2">
+        <p>
+          <small class="ps-2">Added <span id="count">0</span> files: <span id="file-names"></span></small>
+        </p>
+        <div id="thumbnails"></div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" name="campground[description]" required></textarea>
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <button type="submit" class="btn btn-success">Add Campground</button>
+  </form>
+</div>
+
+<script src="/js/image-inputs.js"></script>

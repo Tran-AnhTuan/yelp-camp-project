@@ -1,0 +1,8 @@
+<footer class="footer bg-dark py-3 mt-auto">
+    <div class="container d-flex justify-content-between">
+        <span class="text-secondary">&copy; YelpCamp2023</span>
+        <% if (currentUser) { %>
+        <span class="text-secondary">Login as [<%= currentUser.username %>]</span>
+        <% } %>
+    </div>
+</footer>

@@ -1,0 +1,96 @@
+<% layout('./layouts/boilerplate.ejs') %>
+<link rel="stylesheet" href="/css/stars.css" />
+<div class="container row">
+  <div class="col-6">
+    <div class="card mb-3">
+      <div id="campgroundCarousel" class="carousel slide card-img-top">
+        <div class="carousel-inner">
+          <% camp.images.forEach( (image,index) => { %>
+          <div class="carousel-item <%= index==0?'active':'' %>" style="height: 400px">
+            <img class="h-100 w-100 object-fit-cover rounded-top-2" src="<%=image.url%>" class="d-block w-100" alt="campground-image" />
+          </div>
+          <% }) %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"><%= camp.title %></h5>
+        <p class="card-text"><i><%= camp.description?camp.description:"No description yet" %></i></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item text-body-secondary"><%= camp.location %></li>
+        <li class="list-group-item text-body-secondary">Created by <i><%= camp.author.username %></i></li>
+        <li class="list-group-item"><b>$<%= camp.price %>/night</b></li>
+      </ul>
+      <% if (currentUser && camp.author.equals(currentUser._id)) {%>
+      <div class="card-body">
+        <a href="/campgrounds/<%=camp.id%>/edit" class="btn btn-success">Edit Campgrounds</a>
+        <form class="d-inline-block" action="/campgrounds/<%=camp.id%>?_method=DELETE" method="POST">
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <% } %>
+      <div class="card-footer text-body-secondary">Last updated: 2 days ago</div>
+    </div>
+  </div>
+  <div class="col-6">
+    <% if (currentUser) { %>
+    <div class="new-review mb-3">
+      <h2>Leave a review</h2>
+      <form action="/campgrounds/<%=camp.id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+        <div class="mb-3">
+          <fieldset class="starability-basic">
+            <legend class="fs-5">Rating:</legend>
+            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+            <label for="first-rate1" title="Terrible">1 star</label>
+            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+            <label for="first-rate2" title="Not good">2 stars</label>
+            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+            <label for="first-rate3" title="Average">3 stars</label>
+            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+            <label for="first-rate4" title="Very good">4 stars</label>
+            <input type="radio" id="first-rate5" name="review[rating]" value="5" checked />
+            <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="body">Review</label>
+          <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+          <div class="invalid-feedback">Please share your experience with us!!</div>
+          <div class="valid-feedback">Thanks for your review!!</div>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <% } %>
+    <div class="reviews mb-3 border rounded p-3">
+      <h2>Reviews</h2>
+      <div class="overflow-auto pe-3" style="scroll-behavior: smooth; height: 250px">
+        <% if (!camp.reviews.length) { %>
+        <p>There are no reviews yet. Be the first to write one!</p>
+        <% } %> <% camp.reviews.forEach(review => { %>
+        <div class="review card mb-3">
+          <div class="card-body">
+            <h6><%= review.author.username %></h6>
+            <p class="starability-result" data-rating="<%=review.rating%>">Rated: <%=review.rating%> stars</p>
+            <p>Review: <%=review.body%></p>
+            <% if (currentUser && review.author.equals(currentUser._id)) { %>
+            <a href="#" class="btn btn-sm btn-success">Edit</a>
+            <form action="/campgrounds/<%=camp.id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="d-inline-block">
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
